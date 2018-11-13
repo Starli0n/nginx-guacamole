@@ -1,0 +1,46 @@
+version: '2.1'
+
+services:
+
+  guacd:
+    container_name: guacd
+    image: guacamole/guacd:${GUACD_TAG}
+    volumes:
+      - ./guacamole/drive:/drive:rw
+      - ./guacamole/record:/record:rw
+    restart: always
+
+  guacamole:
+    container_name: ${GUACAMOLE_CONTAINER}
+    image: guacamole/guacamole:${GUACAMOLE_TAG}
+    environment:
+      GUACD_HOSTNAME: guacd
+      GUACD_PORT: 4822
+      POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '${HTTP_PORT}:8080'
+    depends_on:
+      - guacd
+      - guacamole_db
+    restart: always
+
+  guacamole_db:
+    container_name: ${GUACAMOLE_CONTAINER}-db
+    image: postgres:${POSTGRES_TAG}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./guacamole/init:/docker-entrypoint-initdb.d:ro
+      - ./guacamole/data:/var/lib/postgresql/data:rw
+    restart: always
+
+# networks:
+#   default:
+#     external:
+#       name: ${NGINX_PROXY_NET}
