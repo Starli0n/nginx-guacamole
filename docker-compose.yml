@@ -20,8 +20,11 @@ services:
       POSTGRES_DATABASE: ${POSTGRES_DATABASE}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - '${HTTP_PORT}:8080'
+      VIRTUAL_HOST: guacamole.${NGINX_HOSTNAME}
+      LETSENCRYPT_HOST: guacamole.${NGINX_HOSTNAME}
+      LETSENCRYPT_EMAIL: guacamole@no-reply.com
+    # ports:
+    #   - '${HTTP_PORT}:8080'
     depends_on:
       - guacd
       - guacamole_db
@@ -40,7 +43,7 @@ services:
       - ./guacamole/data:/var/lib/postgresql/data:rw
     restart: always
 
-# networks:
-#   default:
-#     external:
-#       name: ${NGINX_PROXY_NET}
+networks:
+  default:
+    external:
+      name: ${NGINX_PROXY_NET}
