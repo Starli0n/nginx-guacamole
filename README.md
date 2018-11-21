@@ -23,3 +23,10 @@ http://HOSTNAME:8080/guacamole
 
 - Username: guacadmin
 - Password: guacadmin
+
+
+## POSTGRES
+
+```
+psql -h postgres -U guacamole_user -d guacamole_db
+```
