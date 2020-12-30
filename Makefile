@@ -6,6 +6,9 @@ export GUACAMOLE_HTTP_URL=http://${GUACAMOLE_HOSTNAME}:${NGINX_PROXY_HTTP}/guaca
 export GUACAMOLE_HTTPS_URL=https://${GUACAMOLE_HOSTNAME}:${NGINX_PROXY_HTTPS}/guacamole
 export GUACAMOLE_EXTERNAL_URL=${GUACAMOLE_HTTPS_URL}
 
+SHELL = bash
+.ONESHELL:
+
 .PHONY: env_var
 env_var: # Print environnement variables
 	@cat .env

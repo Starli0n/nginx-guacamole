@@ -30,3 +30,25 @@ http://HOSTNAME:8080/guacamole
 ```
 psql -h postgres -U guacamole_user -d guacamole_db
 ```
+
+## SSH
+
+For SSH Connection protocol, use those commands to genereate SSH private key:
+
+```
+mkdir .ssh
+KEYFILE=$PWD/.ssh/id_guacamole_rsa
+openssl genrsa -out ${KEYFILE} -passout stdin 4096
+ssh-keygen -y -f ${KEYFILE} > ${KEYFILE}.pub
+echo -n " guacamole@no-reply.com" >> ${KEYFILE}.pub
+```
+
+Header should be: `-----BEGIN RSA PRIVATE KEY-----`
+
+DO NOT USE:
+
+```
+ssh-keygen -t rsa -b 4096 -C "guacamole@no-reply.com" -f "$PWD/.ssh/id_guacamole_rsa"
+```
+
+https://issues.apache.org/jira/browse/GUACAMOLE-745?focusedCommentId=17191235&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-17191235
